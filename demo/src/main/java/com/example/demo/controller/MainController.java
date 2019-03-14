@@ -13,8 +13,7 @@ import com.example.demo.service.TestService;
 
 @Controller
 @RequestMapping("/test")
-public class TestController {
-	
+public class MainController {
 	@Autowired
 	TestService testservice;
 	
@@ -22,33 +21,6 @@ public class TestController {
 	public String main(){
 		return "Main";
 	}
-	
-	@RequestMapping("/lmyList")
-	public String lmyList(){
-		return "lmyBoard";
-	}
-	
-	@RequestMapping("/kcyList")
-	public String kcyList(){
-		return "kcyBoard";
-	}
-	
-	@RequestMapping("/sysBoard")
-	public String sysList(){
-		return "ssyBoard";
-	}
-	
-	@RequestMapping("/yshBoard")
-	public String yshList(){
-		return "yshBoard";
-	}
-	
-	@RequestMapping("/ashBoard")
-	public String ashList(){
-		return "ashBoard";
-	}
-	
-	
 	
 	@RequestMapping("/signup")
 	public String goSignup(@ModelAttribute TestDomain testdomain) {
