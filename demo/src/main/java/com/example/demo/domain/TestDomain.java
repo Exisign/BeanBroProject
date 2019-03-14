@@ -19,5 +19,10 @@ public class TestDomain {
 	@Column(nullable=false)
 	private String content;
 	
+	@Column
+	private String test;
+	
+	
+	
 	
 }

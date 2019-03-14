@@ -18,6 +18,38 @@ public class TestController {
 	@Autowired
 	TestService testservice;
 	
+	@RequestMapping("/main")
+	public String main(){
+		return "Main";
+	}
+	
+	@RequestMapping("/lmyList")
+	public String lmyList(){
+		return "lmyBoard";
+	}
+	
+	@RequestMapping("/kcyList")
+	public String kcyList(){
+		return "kcyBoard";
+	}
+	
+	@RequestMapping("/sysBoard")
+	public String sysList(){
+		return "ssyBoard";
+	}
+	
+	@RequestMapping("/yshBoard")
+	public String yshList(){
+		return "yshBoard";
+	}
+	
+	@RequestMapping("/ashBoard")
+	public String ashList(){
+		return "ashBoard";
+	}
+	
+	
+	
 	@RequestMapping("/signup")
 	public String goSignup(@ModelAttribute TestDomain testdomain) {
 		return "test/signup";
