@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 import lombok.Data;
 
+ 
 @Data
 @Entity
 public class TestDomain {
