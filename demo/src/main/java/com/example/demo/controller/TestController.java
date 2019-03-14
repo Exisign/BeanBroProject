@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.domain.TestDomain;
-import com.example.demo.repository.service.TestService;
+import com.example.demo.service.TestService;
 
 @Controller
 @RequestMapping("/test")
