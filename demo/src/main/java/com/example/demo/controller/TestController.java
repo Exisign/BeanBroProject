@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.domain.TestDomain;
-import com.example.demo.repository.service.TestService;
+import com.example.demo.service.TestService;
 
 @Controller
 @RequestMapping("/test")
@@ -20,7 +20,6 @@ public class TestController {
 	
 	@RequestMapping("/signup")
 	public String goSignup(@ModelAttribute TestDomain testdomain) {
-
 		return "test/signup";
 	}
 	
