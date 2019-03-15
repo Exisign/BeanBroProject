@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/sys")
+@RequestMapping("/test")
 public class SsyController {
 	
 	@RequestMapping("/sysBoard")
