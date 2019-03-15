@@ -12,4 +12,10 @@ public class AshController {
 		return "ashBoard";
 	}
 	
+	@RequestMapping("/writeForm")
+	public String writeForm(){
+		return "ashWriteForm";
+		
+	}
+	
 }
