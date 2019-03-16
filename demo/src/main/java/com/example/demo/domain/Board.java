@@ -9,46 +9,42 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import lombok.Data;
 
-//글번호, 제목, 작성일, 내용, 글쓴이(닉네임), 아이디, 조회수, 글수정일, 
 @Data
 @Entity
-public class Board{
+public class Board {
 
-	//게시판유형(타입식별자)
-	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int number;
+	private int boardNo;
 	
-	@Column(nullable=false)
+	@ManyToOne
+	@JoinColumn(name = "memberNo")
+	private Member member;
+	
+	@Column(nullable=false, length = 5)
 	private String boardType;
-	
+		
 	@Column(nullable=false)
 	private String title;
 	
-	@Column
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date writeDate = new Date();
-	
-	@Column(nullable=false, length=1000)
+	@Column(nullable=false, length = 1000)
 	private String content;
 	
-	@Column
+	@Column(nullable=false)
+	@Temporal(TemporalType.DATE)
+	private Date writeDate = new Date();
+	
+	@Column(nullable=false)
 	private int hit = 0;
 	
-	@Column
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable=false)
+	@Temporal(TemporalType.DATE)
 	private Date modifyDate = new Date();
-	
-	@ManyToOne
-	@JoinColumn(name = "member_sq")
-	private Member member;
 	
 	
 	
