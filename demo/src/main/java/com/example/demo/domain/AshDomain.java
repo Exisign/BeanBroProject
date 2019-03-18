@@ -51,7 +51,4 @@ public class AshDomain{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifyDate = new Date();
 	
-
-	
-	
 }

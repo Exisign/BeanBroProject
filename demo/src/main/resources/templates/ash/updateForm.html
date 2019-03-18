@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>write</title>
+  <title>SB Admin 2 - Tables</title>
 
   <!-- Custom fonts for this template -->
   <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
@@ -19,28 +19,15 @@
 
   <!-- Custom styles for this page -->
   <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
-
-<style>
-textarea {
-width:100%;
-height:600px;
-}
-
-#subject {
-border-right:none;
-}
-
-#substance {
-border:none;
-width:100%;
-}
-
-#buttonGather {
-float:right;
-}
-
-</style>
-
+  
+  <style>
+  textarea{
+  	width:100%;
+  }
+  
+  </style>
+  
+  
 </head>
 
 <body id="page-top">
@@ -52,11 +39,11 @@ float:right;
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/test/main}">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">게시판 <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
       </a>
 
       <!-- Divider -->
@@ -146,7 +133,7 @@ float:right;
 
       <!-- Nav Item - Tables -->
       <li class="nav-item active">
-        <a class="nav-link" href="/ysh/yshBoard">
+        <a class="nav-link" href="tables.html">
           <i class="fas fa-fw fa-table"></i>
           <span>Tables</span></a>
       </li>
@@ -345,9 +332,7 @@ float:right;
                 </a>
               </div>
             </li>
-
           </ul>
-
         </nav>
         <!-- End of Topbar -->
 
@@ -359,76 +344,42 @@ float:right;
           <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
 
           <!-- DataTales Example -->
-          <div class="card shadow mb-4">
+          <div class="card shadow mb-4" style="width:100%;">
             <div class="card-header py-3">
               <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
             </div>
-            <div class="card-body">
-              <div class="table-responsive">
-     
-     
-     <form id = "register" method="post" action = "/ysh/registerPosting" encType="multiplart/form-data">
-          <div>게시판</div> 
-          <input id = "boardType" name = "boardType" type = "text" style = "display:none">
-   		   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-		
-            <tr>
-                <th id = "subject">게시판분류 </th>
-                <td><select id = "typeSelect">
-				  <option value="ash">ash</option>
-				  <option value="kcy">kcy</option>
-				  <option value="imy">imy</option>
-				  <option value="ssy">ssy</option>
-				  <option value="ysh">ysh</option>
-				</select></td>		
-            </tr>
-            	
-            <tr>
-                <th id = "subject">제목 </th>
-                <td><input id = "substance" class = "substance" type="text" placeholder="제목을 입력하세요." name="title" /></td>
-            </tr>
-            <tr>
-                <td colspan = "2"><textarea class = "substance" cols="10" placeholder="내용을 입력하세요. " name="content" form = "register"></textarea></td>
-            </tr>
-
-
-            <tr>
-                <td colspan="2">
-                	<div id = "buttonGather">      
-                    <button type = "button" id = "reset">reset</button>
-                    <button type = "button" id = "backList">목록으로</button>
-                    <button type = "button" id = "registerPosting">글등록</button>
-                    </div>
-                </td>
-            </tr>
-     
-   
-                </table>
-                   </form>
-              </div>
-            </div>
+			    <form id='form' action="updateComplete">
+			    	<table class="table" id="dataTable" width="100%" cellspacing="0">
+			    		<tr>
+			    			<th>게시판분류</th>
+			    			<td>
+			    				<select name="boardType">
+					    			<option value="kcy">kcy</option>
+					    			<option value="lmy">lmy</option>
+					    			<option value="ysh">ysh</option>
+					    			<option value="ssy">ssy</option>
+					    			<option value="ash">ash</option>
+				    			</select>
+			    			</td>
+			    		</tr>
+			    		<tr>
+			    			<th>제목</th>
+			    			<td><input type="text" name="title" th:value="${read.title}" style="width:100%; border: 0;" autofocus="autofocus"></td>
+			    		</tr>
+				    	<tr>
+				    		<td colspan="2">
+				    			<textarea id='textarea' cols="50" rows="10"  name="content" form='form' th:text="${read.content}" style="width:100%; border: 0;" ></textarea>
+				    		</td>
+				    	</tr>
+			    	</table>
+			    	<input type="hidden" name="boardNo" th:value="${read.boardNo}">
+          			<input type="submit" value="완료"></input>
+			    </form>
           </div>
-		
-		
         </div>
         <!-- /.container-fluid -->
-
-		
-
-
       </div>
       <!-- End of Main Content -->
-
-      <!-- Footer -->
-      <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2019</span>
-          </div>
-        </div>
-      </footer>
-      <!-- End of Footer -->
-
     </div>
     <!-- End of Content Wrapper -->
 
@@ -458,8 +409,6 @@ float:right;
       </div>
     </div>
   </div>
-  
-
 
   <!-- Bootstrap core JavaScript-->
   <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
@@ -477,47 +426,6 @@ float:right;
 
   <!-- Page level custom scripts -->
   <script th:src="@{/js/demo/datatables-demo.js}"></script>
-  
-  <script>
-  
-  $(document).ready(function(){        
-
-	  var inputList = $('.substance');
-
-	  $('#registerPosting').click(function(){
-		   alert("글등록");
-		   $('#register').submit();
-	  });
-	  
-	  $('#backList').click(function(){
-		  alert("목록으로");
-		  window.location.href = '/ysh/yshBoard';
-	  });
-	  
-	  $('#reset').click(function(){
-		  alert("내용리셋");	  
- 		  for (var i = 0; i < inputList.length; i++) {
- 			  $(inputList[i]).prop('value', "감자");	// 아래 .val()과 동일. 제이쿼리로 감싸서 하는 것 잊지말자. $()안에 넣자.			  
-//			  $(inputList[i]).attr('value', "감자");	// 이건 안돼.	
-//			  attr은 정적, prop는 동적태그 때 사용. 정적이란 기존에 html에 박혀있는 것들 
-//				=> attr - ex) <input value = "정해져 있는 값">. value가 input안에 삽입되어있음. 직접 value를 삽입함.html파일을 생성할 때 input value속성이 적혀있음.
-//				=> prop - ex) 게시판 처럼 사용자가 입력하는 input <input>. 사용자가 입력하면서 input 태그 안 value가 생긴다. 이럴 경우 prop
-//			  $(inputList[i]).val("");
-		  }	    		  
-	  });  
-	  
-	  $('#typeSelect').change(function(){
-		  $('#boardType').prop('value', $("#typeSelect option:selected").val());
-	  });
-    
-
-
-});
-
-  
-
-  
-  </script>
 
 </body>
 
