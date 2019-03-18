@@ -35,9 +35,13 @@ public class YshController {
 	@RequestMapping("/registerPosting")	
 	public String yshRegistering(@ModelAttribute Board board){	// 글쓰기. insert
 		Member member = new Member();
-		member.setMemberNo(1);		// 임시로 멤버객체삽입하여 글쓴이(writer) 대체. 미연누님께서 member table 완성시켜주시면 제대로된 member 객체 삽입
-		board.setMember(member);
-		boardservice.dataSave(board);
+		
+		/*
+		 * member.setMemberNo(1); // 임시로 멤버객체삽입하여 글쓴이(writer) 대체. 미연누님께서 member table
+		 * 완성시켜주시면 제대로된 member 객체 삽입 board.setMember(member);
+		 */
+		  boardservice.dataSave(board);
+		 
 		return "redirect:/ysh/yshBoard";
 	}
 	

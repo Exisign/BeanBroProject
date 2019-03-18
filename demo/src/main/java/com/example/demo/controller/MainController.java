@@ -19,7 +19,8 @@ public class MainController {
 	
 	@RequestMapping("/main")
 	public String main(){
-		return "Main";
+//		return "Main";
+		return "index";
 	}
 	
 	@RequestMapping("/signup")
