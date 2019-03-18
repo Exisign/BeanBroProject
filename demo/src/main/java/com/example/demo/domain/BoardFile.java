@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Table(name="file")
 @Data
-public class File {
+public class BoardFile {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)

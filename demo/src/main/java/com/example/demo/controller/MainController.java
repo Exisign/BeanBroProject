@@ -23,6 +23,12 @@ public class MainController {
 		return "index";
 	}
 	
+	@RequestMapping("/main2")
+	public String main2(){
+//		return "Main";
+		return "index2";
+	}
+	
 	@RequestMapping("/signup")
 	public String goSignup(@ModelAttribute TestDomain testdomain) {
 
@@ -42,4 +48,33 @@ public class MainController {
 		return "test/allList";
 	}
 	
+	
+	/**
+	 * 이하 상단바 링크 주소
+	 * @return
+	 */
+	@RequestMapping("/about")
+	public String about(){
+		return "about-us";
+	}
+	@RequestMapping("/Service")
+	public String service(){
+		return "service";
+	}
+	@RequestMapping("/team")
+	public String team(){
+		return "team";
+	}
+	@RequestMapping("/blog")
+	public String blog(){
+		return "blog";
+	}
+	@RequestMapping("/blogdetails")
+	public String blogdetails(){
+		return "single-blog";
+	}
+	@RequestMapping("/contact")
+	public String contact(){
+		return "contact";
+	}
 }

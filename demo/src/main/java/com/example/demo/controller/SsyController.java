@@ -17,8 +17,8 @@ public class SsyController {
 	@RequestMapping("/sysBoard")
 	public String sysList(Model model){
 		
-		return "ssyBoard";
+		return "sys/ssyBoard";
 	}
 	
-
+	
 }
