@@ -56,7 +56,7 @@ float:right;
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">ysh 게시판 <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">게시판 <sup>2</sup></div>
       </a>
 
       <!-- Divider -->
@@ -368,7 +368,7 @@ float:right;
      
      
 
-          <div>YSH 게시판</div> 
+          <div>게시판</div> 
           <input id = "boardNo" name = "boardNo" type = "text" style = "display:none" th:value = "${board.boardNo}">
    		   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 		
@@ -493,6 +493,8 @@ float:right;
 	  
 	  $('#deletePosting').click(function(){
 		  alert("글삭제");	  
+		  boardNo = $('#boardNo').val();
+		  window.location.href = '/ysh/deletePosting?boardNo=' + boardNo;
 		// 글 삭제.
 	  });  
 	  
