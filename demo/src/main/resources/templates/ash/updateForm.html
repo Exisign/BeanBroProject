@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>AshBoard</title>
+  <title>SB Admin 2 - Tables</title>
 
   <!-- Custom fonts for this template -->
   <link th:href="@{/vendor/fontawesome-free/css/all.min.css}" rel="stylesheet" type="text/css">
@@ -19,7 +19,15 @@
 
   <!-- Custom styles for this page -->
   <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
-
+  
+  <style>
+  textarea{
+  	width:100%;
+  }
+  
+  </style>
+  
+  
 </head>
 
 <body id="page-top">
@@ -336,34 +344,38 @@
           <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the <a target="_blank" href="https://datatables.net">official DataTables documentation</a>.</p>
 
           <!-- DataTales Example -->
-          <div class="card shadow mb-4">
+          <div class="card shadow mb-4" style="width:100%;">
             <div class="card-header py-3">
               <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
             </div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th>제목</th>
-                      <th>닉네임</th>
-                      <th>작성일</th>
-                      <th>조회수</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="list:${list}">
-                      <td ><a th:href="@{'/ash/readForm?boardNo='+${list.boardNo}}" th:text="${list.title}"></a></td>
-                      <td th:text="${list.member.memberId}"></td>
-                      <td th:text="${list.writeDate}"></td>
-                      <td th:text="${list.hit}"></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+			    <form id='form' action="updateComplete">
+			    	<table class="table" id="dataTable" width="100%" cellspacing="0">
+			    		<tr>
+			    			<th>게시판분류</th>
+			    			<td>
+			    				<select name="boardType">
+					    			<option value="kcy">kcy</option>
+					    			<option value="lmy">lmy</option>
+					    			<option value="ysh">ysh</option>
+					    			<option value="ssy">ssy</option>
+					    			<option value="ash">ash</option>
+				    			</select>
+			    			</td>
+			    		</tr>
+			    		<tr>
+			    			<th>제목</th>
+			    			<td><input type="text" name="title" th:value="${read.title}" style="width:100%; border: 0;" autofocus="autofocus"></td>
+			    		</tr>
+				    	<tr>
+				    		<td colspan="2">
+				    			<textarea id='textarea' cols="50" rows="10"  name="content" form='form' th:text="${read.content}" style="width:100%; border: 0;" ></textarea>
+				    		</td>
+				    	</tr>
+			    	</table>
+			    	<input type="hidden" name="boardNo" th:value="${read.boardNo}">
+          			<input type="submit" value="완료"></input>
+			    </form>
           </div>
-          <button><a href="writeForm">글쓰기</button>
         </div>
         <!-- /.container-fluid -->
       </div>
