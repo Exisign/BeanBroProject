@@ -3,11 +3,25 @@
 	layout:decorate="~{layout/defaultLayout}"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
+<style type="text/css">
+	.boardGrid{
+		display: grid;
+		grid-template-columns: 10% 50% 20% 10% 10%;
+		border-bottom: 1px solid #e3e6f0;
+		padding: 10px 0;
+	}
+</style>
 </head>
 <body>
 	<div layout:fragment="defaultContent" id="defaultContent">
 		<ul>
-			<li></li>
+			<li class="boardGrid" th:each="list : ${boardList}">
+				<span th:text="${list.boardNo}"></span>
+				<a th:href="|/kcy/readPosting?boardNo=${list.boardNo}|"><span th:text="${list.title}"></span></a>
+				<span th:text="|아이디(${list.member.memberId})|"></span>
+				<span th:text="${list.writeDate}"></span>
+				<span th:text="|조회수 ${list.hit}|"></span>
+			</li>
 		</ul>
 	</div>
 </body>
