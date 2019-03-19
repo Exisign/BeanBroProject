@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 
 <head>
   <meta charset="utf-8">
@@ -21,9 +23,34 @@
   <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
 
 <style>
-#textarea {
+
+
+.textarea {
 width:100%;
 height:600px;
+}
+
+.replyBody {
+width:100%;
+}
+
+.reBtnBody {
+padding-top:45px;
+float:right;
+}
+
+.replyBtn {
+font-size:8px;
+}
+
+.replyContent{
+width:100%;
+height:100px;
+margin-top:20px;
+}
+
+.insertReply {
+font-size:8px;
 }
 
 #subject {
@@ -35,9 +62,74 @@ border:none;
 width:100%;
 }
 
-#buttonGather {
+.buttonGather {
 float:right;
 }
+
+
+
+.hitCount {
+width:30%;
+float:left;
+}
+
+.replyCount {
+width:10%;
+float:left;
+}
+
+.replyHeader{
+width:100%;
+margin-bottom:50px;
+}
+
+.contentBody {
+margin-bottom:10px;
+padding-bottom:10px;
+border-bottom:1px solid;
+}
+
+#replyList {
+width:100%;
+background-color : #f7f7f7;
+}
+
+.reTime {
+font-size : 8px;
+width:10%;
+float:left;
+padding:10px;
+}
+
+.reId {
+font-weight: bold;
+width:10%;
+float:left;
+padding:10px;
+}
+
+.reBody {
+width:93%;
+padding:10px;
+
+}
+
+.goReply {
+padding:10px 10px 20px 10px;
+}
+
+.reButtonGather {
+
+}
+
+/* .rereBox {
+display:none;
+} */
+
+ .contentBody {
+padding-left:30px;
+} 
+ 
 
 </style>
 
@@ -370,38 +462,77 @@ float:right;
 
           <div>게시판</div> 
           <input id = "boardNo" name = "boardNo" type = "text" style = "display:none" th:value = "${board.boardNo}">
-   		   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+   		   <table class="table table-bordered" id="dataTable" style = "width:100%">
 		
             <tr>
                 <th id = "subject">게시판분류 </th>
                 <td th:text = "${board.boardType}"></td>		
             </tr>
             	
-            <tr th:each = "board : ${board}">
-                <th id = "subject">제목 </th>
-               <td th:text = "${board.title}"></td>
-            </tr>
             <tr>
-                <td id = "textarea" colspan = "2" th:text="${board.content}"></td>
+                <th id = "subject">제목 </th>
+                <td th:text = "${board.title}"></td>
             </tr>
-
+            
+            <tr>
+                <td class = "textarea" colspan = "2" th:text="${board.content}"></td>
+            </tr>
 
             <tr>
                 <td colspan="2">
-                	<div id = "buttonGather">    
+                	<div class = "buttonGather">    
                     <button type = "button" id = "backList">목록으로</button>  
                     <button type = "button" id = "modifyPosting">수정</button>
                     <button type = "button" id = "deletePosting">삭제</button>
                     </div>
                 </td>
             </tr>
-     
-   
+            
                 </table>
-                
+            
+            <div class="replyHeader" >
+            
+            <div class = "replyCount">
+            <span>댓글</span>
+            <span id = "reCount" th:text="${replyCount}"></span>
+            </div>
+            
+            <div class = "hitCount">
+            <span>조회수</span>
+            <span th:text = "${board.hit}"></span>
+            </div> 
+            
               </div>
+              
+          
+ 
+          
+                <div class = "reply">
+              
+              <div id ="replyList">
+    		
+            	
+            	</div>
+            	                    
+                    <form id = "reply" action = "/" method = "post" >
+                    <div class = "replyBody">
+<!--                     <input id = "member" name = "member" style = "display:none"> -->
+                    <textarea id = "replyContent" class = "replyContent" cols="10" placeholder="내용을 입력하세요. " name="replyContent" form = "addReply"></textarea>
+                    </div>
+            		</form>
+            		
+            	    <div class = "buttonGather">    
+                    <button type = "button" class = "insertReply" id = "insertReply">등록</button>  
+                    </div>
+            	
+            </div>
+              
+              
+              </div>
+              
             </div>
           </div>
+		
 		
 		
         </div>
@@ -455,27 +586,98 @@ float:right;
   
 
 
+  <th:block layout:fragment="script">
+  <script th:inline = "javascript" th:src="@{'/js/reply.js'}"></script>
   <!-- Bootstrap core JavaScript-->
   <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
   <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-
   <!-- Core plugin JavaScript-->
   <script th:src="@{/vendor/jquery-easing/jquery.easing.min.js}"></script>
-
   <!-- Custom scripts for all pages-->
   <script th:src="@{/js/sb-admin-2.min.js}"></script>
-
   <!-- Page level plugins -->
   <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
   <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
-
   <!-- Page level custom scripts -->
   <script th:src="@{/js/demo/datatables-demo.js}"></script>
   
-  <script>
+  <script th:inline = "javascript">
   
-  $(document).ready(function(){        
+  	var listLength = 0;
+  
+  $(document).ready(function(e){   
+	  
+	  (function getAllReplies() {
+		  replyManager.getAll([[${board.boardNo}]], printList)
+	  })();
+	  	 
+	 
+	  
+	  function printList(list) {
+		 
+		  var str = "";
+		  var replyObj;
+		  
+		  for(var i = 0; i < list.length; i++) {
+			  replyObj = list[i];
+		  var reply_time = replyObj.replyDate;
+		  
+			  str += "<div>" +
+			  "<div class = 'reId'>" + replyObj.member.memberId + "</div>" +
+			  "<div class = 'reTime'>" + getTimeStamp(reply_time) + "</div>" +
+			  "<div class = 'goReply'>" + "<a id = 'writeRere' href = 'javascript:gogo(" + listLength + ")'>답글</a>" +"</div>" + 
+			  "</div>" +
+			  
+			  "<div class = 'contentBody'>" + "<div class = 'reContent' colspan='3' >" + replyObj.replyContent + 
+			  "<div class = 'reBody' id = 'rereBox" +listLength+ "' style = 'display:none;'>" + 
+			  "<div><textarea class = 'reBody' cols='10' placeholder = '내용을 입력하세요.' name = 'replyContent' form = 'addReply'></textarea>" + 
+	      	    "<div class = 'reBtnBody'>" + 
+	            "<button class = 'replyBtn' type = 'button' id = 'inserReReply'>등록</button>" +
+	            "</div>" + 	
+			  "</div>" +
+			  
+			  "</div>" +
+			  
+  
+			  "</div></div>"
 
+			  listLength++;
+		  } 
+		  $('#replyList').html(str);	
+		  $('#reCount').text(list.length);	// 댓글갯수count
+		  //
+	  }
+	  
+	  function getTimeStamp(reply_time) {
+		
+		  var replyDate = new Date(reply_time);
+		  
+		  var s =
+		    leadingZeros(replyDate.getFullYear(), 4) + '-' +
+		    leadingZeros(replyDate.getMonth() + 1, 2) + '-' +
+		    leadingZeros(replyDate.getDate(), 2) + ' ' +
+
+		    leadingZeros(replyDate.getHours(), 2) + ':' +
+		    leadingZeros(replyDate.getMinutes(), 2) + ':' +
+		    leadingZeros(replyDate.getSeconds(), 2);
+
+		  return s;
+		}
+
+		function leadingZeros(n, digits) {
+		  var zero = '';
+		  n = n.toString();
+
+		  if (n.length < digits) {
+		    for (i = 0; i < digits - n.length; i++)
+		      zero += '0';
+		  }
+		  return zero + n;
+		}
+		
+
+
+	  
 	  var inputList = $('.substance');
 	  var boardNo = "";
 
@@ -483,7 +685,7 @@ float:right;
 		   alert("글수정");
 		   boardNo = $('#boardNo').val();
 		   window.location.href = '/ysh/modifyPosting?boardNo='+boardNo;		 
-		  //글 수정 리스트로 이동.
+		  //글 수정창으로 이동.
 	  });
 	  
 	  $('#backList').click(function(){
@@ -501,15 +703,59 @@ float:right;
 	  $('#typeSelect').change(function(){
 		  $('#boardType').prop('value', $("#typeSelect option:selected").val());
 	  });
+	  
+
+// 댓글작성.	  
+	  var boardNo = [[${board.boardNo}]];
+//	  var replyerObj = $('#member');
+	  var replyContentObj = $('#replyContent');
+	  
+	  $('#insertReply').click(function(){
+		 
+//			  var replyer = replyerObj.val();
+			  var replyContent = replyContentObj.val();
+			  alert("보드넘버: " + boardNo);
+//			  var obj = {replyContent:replyContent, replyer:replyer, boardNo:boardNo};
+			  var obj = {replyContent:replyContent, boardNo:boardNo};
+			  
+			  console.log(obj);
+			  replyManager.add(obj, function(list){
+				  printList(list);
+				  alert('댓글추가.');
+//				  replyerObj.val("");
+				  replyContentObj.val("");			  
+			  });
+		 
+	  });
+	  
+	  $('#insertReReply').click(function(){
+			 
+alert("대댓글 등록");
+	 
+  });
+	  
+
+	  
     
-
-
 });
 
+  	var clickCount = 0;
   
+	function gogo(listLength2) {
+		clickCount++;
+		alert("listLength: " + listLength2);
+		if(clickCount%2 == 1) {
+			$('#rereBox'+listLength2).css("display", "block"); 
+		} else {
+			$('#rereBox'+listLength2).css("display", "none"); 
+		}
+	
+	}
 
   
   </script>
+</th:block>
+
 
 </body>
 

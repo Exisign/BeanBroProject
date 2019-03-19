@@ -70,13 +70,15 @@ public class AshController {
 	//수정완료하기
 	@RequestMapping("/updateComplete")
 	public String updateComplete(Model model, Member member, Board board) {
+		Board preBoard = boardRepository.findById(board.getBoardNo()).get();
+		board.setMember(preBoard.getMember());
 		System.out.println("보드넘버:"+board.getBoardNo()); //ok
 		System.out.println("바뀐컨텐츠:"+board.getContent()); //ok
-		board = boardRepository.findById(board.getBoardNo()).get();
+		boardRepository.save(board);
+		
 		System.out.println("수정된보드:"+board); //nok
 		//레파지토리 세이브로 DB에 등록
 		//save()호출시, 내부에서 엔티티매니져가 해당 식별키 가진 엔티티 존재 확인. 있으면->update / 없으면->insert 
-		boardRepository.save(board);
 		
 		return "redirect:/ash/ashBoard";
 	}

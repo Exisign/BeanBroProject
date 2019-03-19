@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.domain.Board;
+import com.example.demo.domain.BoardReply;
 import com.example.demo.domain.Member;
+import com.example.demo.service.BoardReplySevice;
 import com.example.demo.service.BoardService;
 
 @Controller
@@ -19,6 +21,9 @@ public class YshController {
 
 	@Autowired
 	private BoardService boardservice;
+	
+	@Autowired
+	private BoardReplySevice boardreplyservice;
 	
 	@RequestMapping("/yshBoard")
 	public String yshList(Model model){	// 게시판 리스트 출력.
@@ -44,7 +49,11 @@ public class YshController {
 	@RequestMapping("/readPosting")	
 	public String yshReading(Model model, @RequestParam int boardNo){	// 쓴글 조회.
 		Board board = boardservice.findBoard(boardNo);
+		int hit = board.getHit()+1;	// 글 read 시 조회수 ++
+		board.setHit(hit);			
+		boardservice.dataSave(board);		
 		model.addAttribute("board", board);
+		
 		return "ysh/readPosting";
 	}
 	
