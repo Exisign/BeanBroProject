@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.demo.domain.TestDomain;
-import com.example.demo.service.TestService;
+import com.example.demo.repository.service.TestService;
 
 @Controller
 @RequestMapping("/test")
@@ -19,7 +19,14 @@ public class MainController {
 	
 	@RequestMapping("/main")
 	public String main(){
-		return "Main";
+//		return "Main";
+		return "index";
+	}
+	
+	@RequestMapping("/main2")
+	public String main2(){
+//		return "Main";
+		return "index2";
 	}
 	
 	@RequestMapping("/signup")
@@ -41,4 +48,33 @@ public class MainController {
 		return "test/allList";
 	}
 	
+	
+	/**
+	 * 이하 상단바 링크 주소
+	 * @return
+	 */
+	@RequestMapping("/about")
+	public String about(){
+		return "about-us";
+	}
+	@RequestMapping("/Service")
+	public String service(){
+		return "service";
+	}
+	@RequestMapping("/team")
+	public String team(){
+		return "team";
+	}
+	@RequestMapping("/blog")
+	public String blog(){
+		return "blog";
+	}
+	@RequestMapping("/blogdetails")
+	public String blogdetails(){
+		return "single-blog";
+	}
+	@RequestMapping("/contact")
+	public String contact(){
+		return "contact";
+	}
 }

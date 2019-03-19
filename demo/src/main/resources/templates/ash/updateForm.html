@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	  layout:decorator="layout/default">
+
+<div layout:fragment="content">
+<body id="page-top">
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+           <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800 text-center">Ash의 게시판</h1>
+          <p class="mb-4 text-center">환상적인 게시판 세계에 오신 것을 환영해</p>
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4" style="width:100%;">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            </div>
+			    <form id='form' action="updateComplete">
+			    	<table class="table" id="dataTable" width="100%" cellspacing="0">
+			    		<tr class="text-center">
+			    			<th>게시판분류</th>
+			    			<td class="text-center">
+			    				<select name="boardType">
+					    			<option value="kcy">kcy</option>
+					    			<option value="lmy">lmy</option>
+					    			<option value="ysh">ysh</option>
+					    			<option value="ssy">ssy</option>
+					    			<option value="ash">ash</option>
+				    			</select>
+			    			</td>
+			    		</tr>
+			    		<tr class="text-center">
+			    			<th>제목</th>
+			    			<td class="text-center"><input type="text" name="title" th:value="${read.title}" style="width:100%; border: 0;" autofocus="autofocus"></td>
+			    		</tr>
+				    	<tr>
+				    		<td colspan="2">
+				    			<textarea id='textarea' cols="50" rows="10"  name="content" form='form' th:text="${read.content}" style="width:100%; border: 0;" ></textarea>
+				    		</td>
+				    	</tr>
+			    	</table>
+			    	<input type="hidden" name="boardNo" th:value="${read.boardNo}">
+          			<input type="submit" value="완료"></input>
+			    </form>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+      </div>
+      <!-- End of Main Content -->
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+</body>
+</div>
+
+</html>

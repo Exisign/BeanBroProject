@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	  layout:decorator="layout/default">
+ 	  
+<div layout:fragment="content">
+<body>
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800 text-center">Ash의 게시판</h1>
+          <p class="mb-4 text-center">환상적인 게시판 세계에 오신 것을 환영해</p>
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4" style="width:100%;">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            </div>
+			    <form id='form'>
+			    	<table class="table" id="dataTable" width="100%" cellspacing="0">
+			    		<tr class="text-center">
+			    			<th>게시판분류</th>
+			    			<td th:text="${read.boardType}"></td>
+			    		</tr>
+			    		<tr class="text-center">
+			    			<th>제목</th>
+			    			<td th:text="${read.title}"></td>
+			    		</tr>
+				    	<tr>
+				    		<td id='textarea' colspan="2" form='form' th:text="${read.content}" style="height:200px;"></td>
+				    	</tr>
+			    	</table>
+			    </form>
+          </div>
+          <button><a href="back">목록</button>
+          <button><a th:href="@{'updateForm?boardNo='+${read.boardNo}}">수정</button>
+          <button><a th:href="@{'delete?boardNo='+${read.boardNo}}">삭제</button>
+        </div>
+        <!-- /.container-fluid -->
+      </div>
+      <!-- End of Main Content -->
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+  
+</body>
+</div>
+
+</html>

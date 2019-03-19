@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	  layout:decorator="layout/default">
+
+<div layout:fragment="content">
+<body id="page-top">
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800 text-center">Ash의 게시판</h1>
+          <p class="mb-4 text-center">환상적인 게시판 세계에 오신 것을 환영해</p>
+
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4" style="width:100%;">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+            </div>
+			    <form id='form' action="/ash/writeComplete">
+			    	<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+			    		<tr>
+			    			<td>게시판분류</td>
+			    			<td>
+				    			<select name="boardType">
+					    			<option value="kcy">kcy</option>
+					    			<option value="lmy">lmy</option>
+					    			<option value="ysh">ysh</option>
+					    			<option value="ssy">ssy</option>
+					    			<option value="ash">ash</option>
+				    			</select>
+			    			</td>
+			    		</tr>
+			    		<tr>
+			    			<td>제목</td>
+			    			<td><input type='text' name="title" style="width:100%; border: 0;"  autofocus="autofocus"></td>
+			    		</tr>
+				    	<tr>
+				    		<td><span>컨텐츠</span></td>
+				    		<td><textarea rows="10" id='textarea' name="content" form='form' style="width:100%; border: 0;"></textarea></td>
+				    	</tr>
+			    	</table>
+          			<input type="submit" value="완료">
+			    </form>
+          </div>
+        </div>
+        <!-- /.container-fluid -->
+      </div>
+      <!-- End of Main Content -->
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+</body>
+</div>
+
+</html>
