@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	layout:decorate="~{layout/defaultLayout}"
+	layout:decorate="~{layout/default}"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <style type="text/css">
@@ -13,7 +13,7 @@
 </style>
 </head>
 <body>
-	<div layout:fragment="defaultContent" id="defaultContent">
+	<div layout:fragment="content" id="defaultContent">
 		<ul>
 			<li class="boardGrid" th:each="list : ${boardList}">
 				<span th:text="${list.boardNo}"></span>

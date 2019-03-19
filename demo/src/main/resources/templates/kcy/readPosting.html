@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	layout:decorate="~{layout/defaultLayout}"
+	layout:decorate="~{layout/default}"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <style type="text/css">
@@ -32,7 +32,7 @@
 </style>
 </head>
 <body>
-	<div layout:fragment="defaultContent" id="defaultContent">
+	<div layout:fragment="content" id="defaultContent">
 		<!-- 추후 세션에 있는 유저의 아이디 값 저장 -->
 		<input type="hidden" id="memberNo" th:value="${board.member.memberNo}">
 		<div style="display:none" type="text" id="memberNone" th:text="${board.member.memberNo}">
