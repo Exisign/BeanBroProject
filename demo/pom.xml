@@ -63,6 +63,13 @@
 		</dependency>
 		<!-- mysql사용. -->
 		
+		<dependency>
+         <groupId>nz.net.ultraq.thymeleaf</groupId>
+         <artifactId>thymeleaf-layout-dialect</artifactId>
+      </dependency>
+      <!-- thymeleaf layout-dialect -->
+		
+		
 	</dependencies>
 
 	<build>
