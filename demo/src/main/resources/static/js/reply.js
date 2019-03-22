@@ -23,7 +23,7 @@ var update = function(obj, callback) {
 	console.log("update 메서드");
 	$.ajax({
 		type : 'post',
-		url  : '/reply/' + obj.boardNo,
+		url  : '/reply/update/' + obj.boardNo,
 		data : JSON.stringify(obj),
 		dataType : 'json',
 		contentType : "application/json",
@@ -33,6 +33,14 @@ var update = function(obj, callback) {
 
 var remove = function (obj, callback) {
 	console.log("remove 메서드");
+	$.ajax({
+		type : 'post',
+		url  : '/reply/delete/' + obj.boardNo,
+		data : JSON.stringify(obj),
+		dataType : 'json',
+		contentType : "application/json",
+		success : callback
+	});
 };
 
 return {
