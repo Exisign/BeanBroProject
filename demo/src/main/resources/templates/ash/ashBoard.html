@@ -20,6 +20,7 @@
             <div class="card-body">
               <div class="table-responsive">
                 <table class="table table-bordered text-center table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                  
                   <thead>
                     <tr class="lead">
                       <th>제목</th>
@@ -28,6 +29,7 @@
                       <th>조회수</th>
                     </tr>
                   </thead>
+                  
                   <tbody>
                     <tr th:each="list:${list}">
                       <td ><a th:href="@{'/ash/readForm?boardNo='+${list.boardNo}}" th:text="${list.title}"></a></td>
@@ -36,6 +38,7 @@
                       <td th:text="${list.hit}"></td>
                     </tr>
                   </tbody>
+                  
                 </table>
               </div>
             </div>
