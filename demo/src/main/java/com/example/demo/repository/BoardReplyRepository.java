@@ -9,7 +9,7 @@ import com.example.demo.domain.BoardReply;
 
 public interface BoardReplyRepository extends JpaRepository<BoardReply, Integer> {
 	
-	@Query(value = "select * from board_reply where board_no = :board_no order by depth, reply_date", nativeQuery = true)
+	@Query(value = "select * from board_reply where board_no = :board_no order by parent_id, depth, reply_date", nativeQuery = true)
 	List <BoardReply> allReplyList(int board_no);
 	
 	@Query(value = "select count(*) from board_reply where board_no = :board_no", nativeQuery = true)

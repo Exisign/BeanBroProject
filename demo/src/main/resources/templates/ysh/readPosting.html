@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- 	  layout:decorator="layout/default">
+     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
 
 <head>
   <meta charset="utf-8">
@@ -74,9 +74,9 @@ margin-bottom:50px;
 }
 
 .contentBody {
-margin-bottom:10px;
-padding-bottom:10px;
-border-bottom:1px solid;
+margin-bottom:15px;
+padding-bottom:15px;
+/* border-bottom:1px solid; */
 }
 
 #replyList {
@@ -104,12 +104,18 @@ padding:10px;
 
 }
 
-.goReply {
-padding:10px 10px 20px 10px;
+.reBodyText {
+width:93%;
+padding:10px;
+
 }
 
-.reButtonGather {
+.goReply {
+padding:10px;
+}
 
+.reHead {
+padding-bottom:10px;
 }
 
 /* .rereBox {
@@ -119,6 +125,10 @@ display:none;
  .contentBody {
 padding-left:30px;
 } 
+
+.replyUpdateBtn, .replyDeleteBtn {
+padding-left : 10px;
+}
 
 </style>
   
@@ -144,13 +154,13 @@ padding-left:30px;
    
           <div>게시판</div> 
           <input id = "boardNo" name = "boardNo" type = "text" style = "display:none" th:value = "${board.boardNo}">
-   		   <table class="table table-bordered" id="dataTable" style = "width:100%">
-		
+            <table class="table table-bordered" id="dataTable" style = "width:100%">
+      
             <tr>
                 <th id = "subject">게시판분류 </th>
-                <td th:text = "${board.boardType}"></td>		
+                <td th:text = "${board.boardType}"></td>      
             </tr>
-            	
+               
             <tr>
                 <th id = "subject">제목 </th>
                 <td th:text = "${board.title}"></td>
@@ -162,7 +172,7 @@ padding-left:30px;
 
             <tr>
                 <td colspan="2">
-                	<div class = "buttonGather">    
+                   <div class = "buttonGather">    
                     <button type = "button" id = "backList">목록으로</button>  
                     <button type = "button" id = "modifyPosting">수정</button>
                     <button type = "button" id = "deletePosting">삭제</button>
@@ -187,26 +197,24 @@ padding-left:30px;
               </div>
               
           
- 
-          
                 <div class = "reply">
               
               <div id ="replyList">
-    		
-            	
-            	</div>
-            	                    
+          
+               
+               </div>
+                                   
                     <form id = "reply" action = "/" method = "post" >
                     <div class = "replyBody">
 <!--                     <input id = "member" name = "member" style = "display:none"> -->
                     <textarea id = "replyContent" class = "replyContent" cols="10" placeholder="내용을 입력하세요. " name="replyContent" form = "addReply"></textarea>
                     </div>
-            		</form>
-            		
-            	    <div class = "buttonGather">    
+                  </form>
+                  
+                   <div class = "buttonGather">    
                     <button type = "button" class = "insertReply" id = "insertReply">등록</button>  
                     </div>
-            	
+               
             </div>
  
         </div>
@@ -225,154 +233,258 @@ padding-left:30px;
   <script th:inline = "javascript" th:src="@{'/js/reply.js'}"></script>
   <script th:inline = "javascript">
   
-  	var listLength = 0;
+     var listLength = 0;
+     var rereBoxStyle = new Array();
+     var re_or_rere = 0;   // 초기값은 0, 페이지 첫 이동 또는 새로고침될 때는 0으로 두어 댓글리스트를 재정리한다. 1일경우 (댓글 또는 대댓글 등록)는 추가된 댓글만 리스트에 추가함.
+     function printList(list) {
+          
+        var str = "";
+        var replyObj;
+        var standard = 0;
+        var rerePlyer;
+        
+        rereBoxStyle = new Array();   // 새로운 댓글이 초기화 되었기 때문에 재정렬을 위해 배열 초기화
+        listLength = 0;   // rereBoxStyle을 초기화 하기 때문에 listLength도 초기화.
+//        alert("list.length: " + list.length);
+        
+        
+        for(var i = 0; i < list.length; i++) {
+           replyObj = list[i];
+        var reply_time = replyObj.replyDate;
+        
+        rerePlyer = replyObj.member.memberId;
+        
+/*         if (replyObj.depth==1 && re_or_rere == 0) {
+           rereBoxStyle.push(listLength);
+           rerePlyer = " ↳ " + replyObj.member.memberId;
+        } else if (listLength == list.length && re_or_rere == 1) {
+           rereBoxStyle.push(listLength);
+        } */
+        
+        if (replyObj.depth==1) {
+           rereBoxStyle.push(listLength);
+           rerePlyer = " ↳ " + replyObj.member.memberId;
+        } else if (replyObj.depth==0) {
+           parentReplyCount++;
+        }
+        
+           str += "<div class = 'parentReply'>"+
+           "<div id = 'reContent" + i +"'>" +
+           "<div class = 'reHead'><div class = 'reId'>" + rerePlyer + "</div>" +
+           "<div class = 'reTime'>" + getTimeStamp(reply_time) + "</div>" +
+           "<div class = 'goReply'>" + 
+           "<a id = 'writeRere" + i + "' href = 'javascript:openReply(" + listLength + ")'>답글</a>" +
+           "<a class = 'replyUpdateBtn' href = 'javascript:updateReply(" + JSON.stringify(list[i]) + "," + i + ")' >수정</a>" +
+           "<a class = 'replyUpdateBtn'>삭제</a>" +      
+           "</div>" + 
+           "</div>" +
+        
+           "<div class = 'contentBody'>" + "<div class = 'reContent' colspan='3'>" + replyObj.replyContent + 
+           "<div class = 'reBody' id = 'rereBox" +listLength+ "' style = 'display:none;'>" + 
+           "<div><textarea class = 'reBodyText' cols='10' placeholder = '내용을 입력하세요.' name = 'reReplyContent' id = 'reReplyContent" + i + "' form = 'addReply'></textarea>" + 
+           "<div class = 'reBtnBody'>" + 
+           "<button class = 'replyBtn' type = 'button'><a href = 'javascript:insertReReply(" + JSON.stringify(list[i]) + "," + i +")'>등록</a></button>" +
+          																			 // JSON.stringify(list[i]) = list[i]는 객체를 json형태로 형변환 하여 매개변수로 담아 보냄. 그냥 객체로 보내면 object 뭐시기 에러..
+
+           "</div>" +                                                                 
+           "</div>" +
+           
+           "</div>" +
+           "<hr/>" +
   
+           "</div></div></div></div>"
+           
+           
+           listLength++;
+        } 
+        
+/*         if (replyObj.depth==1 &&  re_or_rere == 1) {
+           rereBoxStyle.push(listLength+1);
+        } */
+        
+        $('#replyList').html(str);   
+        $('#reCount').text(list.length);   // 댓글갯수count
+        
+        alert("rereBoxStyle.length: " + rereBoxStyle.length);
+        for(var i = 0; i < rereBoxStyle.length; i++) {
+//           alert("하고있니?");
+           $('#reContent'+rereBoxStyle[i]).css("margin-left","50px");
+           $('#writeRere'+rereBoxStyle[i]).css("visibility","hidden");
+        }
+        
+/*         for (var i = 1; i <= parentReplyCount; i++) {
+           $('.parentReply'+i).css("border-bottom","1px solid");
+//           $('.parentReply'+i).css("margin-left","50px");
+        } */
+        
+//        $('#reContent0').css("margin-left","50px");
+     }
+     
+
+     
+     function getTimeStamp(reply_time) {
+      
+        var replyDate = new Date(reply_time);
+        
+        var s =
+          leadingZeros(replyDate.getFullYear(), 4) + '-' +
+          leadingZeros(replyDate.getMonth() + 1, 2) + '-' +
+          leadingZeros(replyDate.getDate(), 2) + ' ' +
+
+          leadingZeros(replyDate.getHours(), 2) + ':' +
+          leadingZeros(replyDate.getMinutes(), 2) + ':' +
+          leadingZeros(replyDate.getSeconds(), 2);
+
+        return s;
+      }
+
+      function leadingZeros(n, digits) {
+        var zero = '';
+        n = n.toString();
+
+        if (n.length < digits) {
+          for (i = 0; i < digits - n.length; i++)
+            zero += '0';
+        }
+        return zero + n;
+      }
+     
+     
   $(document).ready(function(e){   
-	  
-	  (function getAllReplies() {
-		  replyManager.getAll([[${board.boardNo}]], printList)
-	  })();
-	  	 
-	 
-	  
-	  function printList(list) {
-		 
-		  var str = "";
-		  var replyObj;
-		  
-		  for(var i = 0; i < list.length; i++) {
-			  replyObj = list[i];
-		  var reply_time = replyObj.replyDate;
-		  
-			  str += "<div>" +
-			  "<div class = 'reId'>" + replyObj.member.memberId + "</div>" +
-			  "<div class = 'reTime'>" + getTimeStamp(reply_time) + "</div>" +
-			  "<div class = 'goReply'>" + "<a id = 'writeRere' href = 'javascript:gogo(" + listLength + ")'>답글</a>" +"</div>" + 
-			  "</div>" +
-			  
-			  "<div class = 'contentBody'>" + "<div class = 'reContent' colspan='3' >" + replyObj.replyContent + 
-			  "<div class = 'reBody' id = 'rereBox" +listLength+ "' style = 'display:none;'>" + 
-			  "<div><textarea class = 'reBody' cols='10' placeholder = '내용을 입력하세요.' name = 'replyContent' form = 'addReply'></textarea>" + 
-	      	    "<div class = 'reBtnBody'>" + 
-	            "<button class = 'replyBtn' type = 'button' id = 'inserReReply'>등록</button>" +
-	            "</div>" + 	
-			  "</div>" +
-			  
-			  "</div>" +
-			  
+     
+     (function getAllReplies() {
+        replyManager.getAll([[${board.boardNo}]], printList)
+     })();     
+     
   
-			  "</div></div>"
+     var inputList = $('.substance');
+     var boardNo = "";
 
-			  listLength++;
-		  } 
-		  $('#replyList').html(str);	
-		  $('#reCount').text(list.length);	// 댓글갯수count
-		  //
-	  }
-	  
-	  function getTimeStamp(reply_time) {
-		
-		  var replyDate = new Date(reply_time);
-		  
-		  var s =
-		    leadingZeros(replyDate.getFullYear(), 4) + '-' +
-		    leadingZeros(replyDate.getMonth() + 1, 2) + '-' +
-		    leadingZeros(replyDate.getDate(), 2) + ' ' +
+     $('#modifyPosting').click(function(){
+         alert("글수정");
+         boardNo = $('#boardNo').val();
+         window.location.href = '/ysh/modifyPosting?boardNo='+boardNo;       
+        //글 수정창으로 이동.
+     });
+     
+     $('#backList').click(function(){
+        alert("목록으로");
+        window.location.href = '/ysh/yshBoard';
+     });
+     
+     $('#deletePosting').click(function(){
+        alert("글삭제");     
+        boardNo = $('#boardNo').val();
+        window.location.href = '/ysh/deletePosting?boardNo=' + boardNo;
+      // 글 삭제.
+     });  
+     
+     $('#typeSelect').change(function(){
+        $('#boardType').prop('value', $("#typeSelect option:selected").val());
+     });
+     
 
-		    leadingZeros(replyDate.getHours(), 2) + ':' +
-		    leadingZeros(replyDate.getMinutes(), 2) + ':' +
-		    leadingZeros(replyDate.getSeconds(), 2);
+     
+// 댓글작성.     
+     var boardNo = [[${board.boardNo}]];
+//     var replyerObj = $('#member');
+     var replyContentObj = $('#replyContent');
+     
+     $('#insertReply').click(function(){
 
-		  return s;
-		}
-
-		function leadingZeros(n, digits) {
-		  var zero = '';
-		  n = n.toString();
-
-		  if (n.length < digits) {
-		    for (i = 0; i < digits - n.length; i++)
-		      zero += '0';
-		  }
-		  return zero + n;
-		}
-		
-
-
-	  
-	  var inputList = $('.substance');
-	  var boardNo = "";
-
-	  $('#modifyPosting').click(function(){
-		   alert("글수정");
-		   boardNo = $('#boardNo').val();
-		   window.location.href = '/ysh/modifyPosting?boardNo='+boardNo;		 
-		  //글 수정창으로 이동.
-	  });
-	  
-	  $('#backList').click(function(){
-		  alert("목록으로");
-		  window.location.href = '/ysh/yshBoard';
-	  });
-	  
-	  $('#deletePosting').click(function(){
-		  alert("글삭제");	  
-		  boardNo = $('#boardNo').val();
-		  window.location.href = '/ysh/deletePosting?boardNo=' + boardNo;
-		// 글 삭제.
-	  });  
-	  
-	  $('#typeSelect').change(function(){
-		  $('#boardType').prop('value', $("#typeSelect option:selected").val());
-	  });
-	  
-
-// 댓글작성.	  
-	  var boardNo = [[${board.boardNo}]];
-//	  var replyerObj = $('#member');
-	  var replyContentObj = $('#replyContent');
-	  
-	  $('#insertReply').click(function(){
-		 
-//			  var replyer = replyerObj.val();
-			  var replyContent = replyContentObj.val();
-			  alert("보드넘버: " + boardNo);
-//			  var obj = {replyContent:replyContent, replyer:replyer, boardNo:boardNo};
-			  var obj = {replyContent:replyContent, boardNo:boardNo};
-			  
-			  console.log(obj);
-			  replyManager.add(obj, function(list){
-				  printList(list);
-				  alert('댓글추가.');
-//				  replyerObj.val("");
-				  replyContentObj.val("");			  
-			  });
-		 
-	  });
-	  
-	  $('#insertReReply').click(function(){
-			 
-alert("대댓글 등록");
-	 
-  });
-	  
-
-	  
+    	 
+//           var replyer = replyerObj.val();
+           var replyContent = replyContentObj.val();
+           alert("보드넘버: " + boardNo);
+//           var obj = {replyContent:replyContent, replyer:replyer, boardNo:boardNo};
+           var obj = {replyContent:replyContent, boardNo:boardNo, depth:0};
+           
+           console.log(obj);
+           replyManager.add(obj, function(list){
+              printList(list);
+              alert('댓글추가.');
+//              replyerObj.val("");
+              replyContentObj.val("");   
+              re_or_rere = 1;
+         
+           });
+       
+     });
+       
     
 });
 
-  	var clickCount = 0;
+// 답글창 열기
+   function openReply(listLength2) {
+      
+	for(var i = 0; i < $('.reBody').length; i++) {
+          $('.reBody').eq(i).css("display","none");   
+      }       
+         $('#rereBox'+listLength2).css("display", "block");       
+   }
+   
+// 답글창 수정
+   function updateReply(replyObj, num) {
   
-	function gogo(listLength2) {
-		clickCount++;
-		alert("listLength: " + listLength2);
-		if(clickCount%2 == 1) {
-			$('#rereBox'+listLength2).css("display", "block"); 
-		} else {
-			$('#rereBox'+listLength2).css("display", "none"); 
-		}
-	
-	}
+      for(var i = 0; i < $('.reBody').length; i++) {
+         $('.reBody').eq(i).css("display","none");   
+     }       
+         $('#rereBox'+num).css("display", "block");  
+                  
+         $('#reReplyContent'+num).text(replyObj.replyContent);
+         
+          var obj = {replyContent:replyObj.replyContent, boardNo:replyObj.board.boardNo, replyNo:replyObj.replyNo};
+		  replyManager.update(obj, function(list){
+			 alert("댓글수정완료");
+			 replyManager.getAll([[${board.boardNo}]], printList);
+		  }); 
+}
+   
+   var parentReplyCount = 0;
+   
+   var reReplyContentObj;
+    function insertReReply(replyObj2, num) {
+ 
+      // 매개변수 replyObj2
+      console.log(replyObj2.board.boardNo);
+      console.log(replyObj2.replyNo);
+      console.log(replyObj2.replyContent);
+      console.log(replyObj2.member.memberId); 
+      
+      replyObj2.replyContent = $('#reReplyContent'+num).val();
+     
+      console.log("대댓글:" + replyObj2.replyContent);
+      
+           var obj = {replyContent:replyObj2.replyContent, boardNo:replyObj2.board.boardNo, depth:1, replyNo:replyObj2.replyNo};
+           
+           console.log(obj);
+           replyManager.add(obj, function(list){
+              printList(list);
+              alert('대댓글추가.');  
+              re_or_rere = 1;
+         
+           });
+      /*  */
+      
+      
+/*       $.ajax({
+         type : 'post',
+         url  : '/reply/re/' + replyObj2.board.boardNo,
+         data : JSON.stringify(replyObj2),
+         dataType : 'json',
+         contentType : "application/json",
+         success : function(boardreplylist) {
+               
+              replyManager.getAll([[${board.boardNo}]], printList);
+              alert("발동!");
+              re_or_rere = 1;
+         }
+      });  */
+      
+   
+   } 
+    
+    
 
   
   </script>

@@ -50,7 +50,7 @@
 					<tr th:each = "boardlist : ${boardlist}">
                       <th th:text = "${boardlist.boardType}"></th>
                       <th th:text = "${boardlist.member.memberId}"></th>
-                      <th><a th:text = "${boardlist.title}" th:href = "@{'/ysh/readPosting'(boardNo=${boardlist.boardNo})}"></a></th>
+                      <th><a th:text = "${boardlist.title} + ' ['+${boardlist.replyCount + ']'}" th:href = "@{'/ysh/readPosting'(boardNo=${boardlist.boardNo})}"></a></th>
 <!--                       <td><a th:href="@{'/member/inquery'(id=${member.id})}"><p th:text = "${member.id}"></p></a></td> -->
                       <th th:text = "${boardlist.writeDate}"></th>
                       <th th:text = "${boardlist.hit}"></th>
