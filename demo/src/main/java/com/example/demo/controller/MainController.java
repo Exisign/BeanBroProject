@@ -25,8 +25,7 @@ public class MainController {
 	
 	@RequestMapping("/main2")
 	public String main2(){
-//		return "Main";
-		return "index2";
+		return "elements";
 	}
 	
 	@RequestMapping("/signup")

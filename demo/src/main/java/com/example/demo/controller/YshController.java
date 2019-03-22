@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.domain.Board;
+import com.example.demo.domain.BoardReply;
 import com.example.demo.domain.Member;
+import com.example.demo.repository.MemberRepository;
+import com.example.demo.service.BoardReplySevice;
 import com.example.demo.service.BoardService;
 
 @Controller
@@ -20,10 +23,20 @@ public class YshController {
 	@Autowired
 	private BoardService boardservice;
 	
+	@Autowired
+	private BoardReplySevice boardreplyservice;
+	
+	@Autowired
+	private MemberRepository memberrepository;
+	
 	@RequestMapping("/yshBoard")
 	public String yshList(Model model){	// 게시판 리스트 출력.
-		List <Board> boardlist = boardservice.allBoardList();
+		List <Board> boardlist = boardservice.allBoardListOrdWD();
+		
+		
 		model.addAttribute("boardlist", boardlist);
+		
+		
 		return "ysh/yshBoard";
 	}
 	
@@ -34,21 +47,20 @@ public class YshController {
 	
 	@RequestMapping("/registerPosting")	
 	public String yshRegistering(@ModelAttribute Board board){	// 글쓰기. insert
-		Member member = new Member();
-		
-		/*
-		 * member.setMemberNo(1); // 임시로 멤버객체삽입하여 글쓴이(writer) 대체. 미연누님께서 member table
-		 * 완성시켜주시면 제대로된 member 객체 삽입 board.setMember(member);
-		 */
+		Member member = memberrepository.findById(1).get(); // 임시로 멤버객체삽입하여 글쓴이(writer)
+		  board.setMember(member);
 		  boardservice.dataSave(board);
-		 
 		return "redirect:/ysh/yshBoard";
 	}
 	
 	@RequestMapping("/readPosting")	
 	public String yshReading(Model model, @RequestParam int boardNo){	// 쓴글 조회.
 		Board board = boardservice.findBoard(boardNo);
+		int hit = board.getHit()+1;	// 글 read 시 조회수 ++
+		board.setHit(hit);			
+		boardservice.dataSave(board);		
 		model.addAttribute("board", board);
+		
 		return "ysh/readPosting";
 	}
 	
@@ -82,6 +94,8 @@ public class YshController {
 		boardservice.deleteBoard(boardNo);	// 글 삭제.
 		return "redirect:/ysh/yshBoard";
 	}
+	
+
 	
 	
 	

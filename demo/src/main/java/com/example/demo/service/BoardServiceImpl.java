@@ -38,4 +38,10 @@ public class BoardServiceImpl implements BoardService {
 		boardrepository.deleteById(boardNo);
 	}
 
+	@Override
+	public List<Board> allBoardListOrdWD() {
+		// TODO Auto-generated method stub
+		return boardrepository.allBoardListOrdWD();
+	}
+
 }

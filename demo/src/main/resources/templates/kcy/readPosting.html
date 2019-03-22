@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	layout:decorate="~{layout/default}"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<style type="text/css">
+	.boardGrid {
+		display: grid;
+		grid-template-columns: 10% 50% 20% 10% 10%;
+		border-bottom: 1px solid #e3e6f0;
+		padding: 10px 0;
+	}
+	#board-content {
+		background-color: white;
+	    padding: 0 20px;
+   		border: 1px solid #e3e6f0;
+	    border-radius: calc(.35rem - 1px);
+	}
+	#board-content li {
+		list-style-type: none;
+		padding: 10px 0;
+	}
+	#board-content li:not(:last-child) {
+		border-bottom: 1px solid #e3e6f0;
+	}
+	#content-text {
+		min-height: 180px;
+	}
+	#button-group {
+	    text-align: right;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content" id="defaultContent">
+		<!-- 추후 세션에 있는 유저의 아이디 값 저장 -->
+		<input type="hidden" id="memberNo" th:value="${board.member.memberNo}">
+		<div style="display:none" type="text" id="memberNone" th:text="${board.member.memberNo}">
+		</div>
+		
+   		<ul id="board-content" class="shadow" th:object="${board}">
+			<li id="boardNo" th:text="*{boardNo}"></li>
+			<li th:text="|게시판 타입 *{boardType}|"></li>
+			<li>
+				<span th:text="|아이디(*{member.memberId})|"></span>
+				<span th:text="*{writeDate}"></span>
+			</li>
+			<li th:text="*{title}"></li>
+			<li>
+				<div id="content-text" th:text="*{content}|"></div>
+			</li>
+			<li id="button-group">
+				<a class="btn btn-sm btn-primary shadow-sm" th:href="@{/kcy/kcyList}">목록으로</a>
+				<span class="btn btn-sm btn-primary shadow-sm" id="modify-content">수정</span>
+				<a class="btn btn-sm btn-primary shadow-sm" href="#">삭제</a>
+			</li>
+		</ul>
+	</div>
+	
+	 <th:block layout:fragment="script">
+<script type="text/javascript" th:inline="javascript">
+	var boardNo=/*[[${board.boardNo}]]*/;
+	var memberNo=/*[[${board.member.memberNo}]]*/;
+	var memberId=/*[[${board.member.memberId}]]*/;
+</script>
+<script type="text/javascript" th:src="@{/js/kcy/readPosting.js}">
+
+</script>
+</th:block>
+</body>
+
+</html>
