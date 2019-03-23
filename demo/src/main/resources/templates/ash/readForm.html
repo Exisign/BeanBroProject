@@ -3,8 +3,8 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  	  layout:decorator="layout/default">
  	  
-<div layout:fragment="content">
-<body>
+<div layout:fragment="content" style="margin-bottom:10%;">
+
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
@@ -33,25 +33,14 @@
 			    	</table>
 			    </form>
           </div>
-          <button><a href="back">목록</button>
-          <button><a th:href="@{'updateForm?boardNo='+${read.boardNo}}">수정</button>
-          <button><a th:href="@{'delete?boardNo='+${read.boardNo}}">삭제</button>
+          
+          <div class="pull-right">
+          	<a th:href="@{ashBoard(page=${pageVO.page}, size=${pageVO.size}, type=${pageVO.type}, keyword=${pageVO.keyword}, boardNo=${read.boardNo})}" class="btn btn-default">목록</a>
+          	<a th:href="@{updateForm(page=${pageVO.page}, size=${pageVO.size}, type=${pageVO.type}, keyword=${pageVO.keyword}, boardNo=${read.boardNo})}" class="btn btn-default">수정</a>
+          	<a th:href="@{'delete?boardNo=' + ${read.boardNo}}" class="btn btn-default">삭제</a>
+          </div>
         </div>
         <!-- /.container-fluid -->
-      </div>
-      <!-- End of Main Content -->
-    </div>
-    <!-- End of Content Wrapper -->
-
-  </div>
-  <!-- End of Page Wrapper -->
-
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
-  
-</body>
 </div>
-
+<!-- End of Fragment -->
 </html>

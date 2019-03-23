@@ -3,9 +3,7 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
  	  layout:decorator="layout/default">
 
-
-<body>
-   <div layout:fragment="content">     <!-- Begin Page Content -->
+   <div layout:fragment="content" style="margin-bottom:20%;">     <!-- Begin Page Content -->
         <div class="container-fluid">
 
           <!-- Page Heading -->
@@ -19,46 +17,139 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered text-center table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-                  
+            	<div th:with="result=${result.result}">
+                <table class="table table-bordered text-center table-bordered table-hover" id="dataTables-example" width="100%" cellspacing="0">
                   <thead>
                     <tr class="lead">
+                      <th>타입</th>
+                      <th>작성자</th>
                       <th>제목</th>
-                      <th>닉네임</th>
                       <th>작성일</th>
                       <th>조회수</th>
                     </tr>
                   </thead>
                   
                   <tbody>
-                    <tr th:each="list:${list}">
-                      <td ><a th:href="@{'/ash/readForm?boardNo='+${list.boardNo}}" th:text="${list.title}"></a></td>
-                      <td th:text="${list.member.memberId}"></td>
-                      <td th:text="${list.writeDate}"></td>
-                      <td th:text="${list.hit}"></td>
+                    <tr class="odd gradeX" th:each="board:${result.content}">
+                      <td>[[${board.boardType}]]</td>
+                      <td>[[${board.member.memberId}]]</td>
+                      <td><a th:href="${board.boardNo}" th:text="${board.title}" class='boardLink'></a></td>
+                      <td th:text="${board.writeDate}"></td>
+                      <td th:text="${board.hit}"></td>
                     </tr>
                   </tbody>
-                  
                 </table>
+                
+                <div>
+					<select id="searchType">
+						<option>검색조건</option>
+						<option value='t' th:selected="${pageVO.type}=='t'">Title</option>
+						<option value='c' th:selected="${pageVO.type}=='c'">Content</option>
+						<option value='w' th:selected="${pageVO.type}=='w'">Writer</option>
+					</select>
+					
+					<input type='text' id='searchKeyword' th:value="${pageVO.keyword}">
+					<button id='searchBtn' class='btn btn-default'>검색</button>
+				</div>
+                </div>
               </div>
+              
+              <!-- paging -->
+			  <nav aria-label="Page navigation exmaple">
+			  	<div>
+			  		<ul class="pagination center-block" id='paginationAll'>
+			  			<!-- 이전페이지 여부를 체크 후, 이전 페이지가 존재한다면, 이전 페이지 버튼 링크 활성화-->
+						<li class="page-item" th:if="${result.prevPage}">
+							<a th:href="${result.prevPage.pageNumber} + 1" class='customized-page'>PREV[[${result.prevPage.pageNumber}+1]]</a>
+						</li>
+						<!-- 페이지번호들을 each로 쭉 불른 후, 현재누른 페이지와 같다면, active class명을 붙인다 -->
+						<li class="page-item" th:classappend="${p.pageNumber == result.currentPageNum -1} ? active : '' " th:each="p:${result.pageList}"><a th:href="${p.pageNumber}+1" class='customized-page' id='ace'>[[${p.pageNumber}+1]]</a></li>
+						<!-- 다음페이지 여부를 체크한 후, 다음 페이지가 존재한다면, 다음페이지 버튼 링크 활성화 -->
+						<li class="page-item" th:if="${result.nextPage}">
+							<a th:href="${result.nextPage.pageNumber} + 1" class='customized-page'>NEXT[[${result.nextPage.pageNumber}+1]]</a>
+						</li>
+					</ul>
+				</div>
+			  </nav>
+			  
+			  <form id='f1' th:action="@{ashBoard}" method="get">
+			  	<input type="hidden" name="page" th:value=${result.currentPageNum}>
+			  	<input type="hidden" name="size" th:value=${result.currentPage.pageSize}>
+			  	<input type="hidden" name="type" th:value=${pageVO.type}>
+			  	<input type="hidden" name="keyword" th:value=${pageVO.keyword}>
+			  </form>
+          	  
+          	  <div class="text-right"><a href="writeForm" class='btn btn-default'>글쓰기</a></div>
             </div>
+            <!-- End of card-body -->
           </div>
-          <button><a href="writeForm">글쓰기</button>
         </div>
-        <!-- /.container-fluid -->
+        <!-- End of container-fluid -->
       </div>
-      <!-- End of Main Content -->
-    </div>
-    <!-- End of Content Wrapper -->
+      <!-- End of fragment Content -->
 
-  </div>
-  <!-- End of Page Wrapper -->
+<th:block layout:fragment="script"> 
+	<script th:inline="javascript">
+	
+	$(document).ready(function(){
+		var formObj = $("#f1");
+		//페이지번호 클릭 시
+		$(".pagination a").click(function(e){
+			e.preventDefault();
+			//form f1의 name=page를 찾은 후, 그 값을 누른 페이지 번호의 href(페이지번호)로 변경
+			formObj.find('[name="page"]').val($(this).attr('href'));
+			//변경후 이동
+			formObj.submit();
+		});
+		
+		$("#searchBtn").click(function(e){
+			
+			var typeStr = $("#searchType").find(":selected").val(); //검색 타입(제목,키워드,내용)의 값을 typeStr에 담는다.
+			var keywordStr = $("#searchKeyword").val(); //검색값을 keywordStr에 담는다.
+			
+			console.log(typeStr, "" , keywordStr);
+			
+			formObj.find("[name='type']").val(typeStr); //선택한 타입(제목,키워드,내용)의 값을 컨트롤러에 보내기 위해 form의 type value에 넣는다.
+			formObj.find("[name='keyword']").val(keywordStr);
+			formObj.find("[name='page']").val("1");
+			formObj.submit();
+		});
+		
+		$(".page-item").click(function(){
+			$(".active").children().first().css("color","red");
+		});
+		
+		
+		$(".boardLink").click(function(e){
+			
+			e.preventDefault();
+			
+			var boardNo = $(this).attr("href");
+			
+			formObj.attr("action",[[@{'/ash/readForm'}]]);
+			formObj.append("<input type='hidden' name='boardNo' value='" + boardNo + "'>");
+			
+			formObj.submit();
+		});
+		
+		$(window).load(function(){
+			alert("정상적으로 처리되었습니다.");
+			var msg = [[${msg}]];
+			
+			if(msg=='success'){
+				alert("정상적으로 처리되었습니다.");
+				
+				var stateObj = {msg:""};
+			}
+		});
+		
+		
+	});
+	
+	</script>
+</th:block>
 
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
-  </div>
-</body>
+
+
 
 </html>

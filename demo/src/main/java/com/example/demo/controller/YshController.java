@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.domain.Board;
-import com.example.demo.domain.BoardReply;
 import com.example.demo.domain.Member;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.service.BoardReplySevice;

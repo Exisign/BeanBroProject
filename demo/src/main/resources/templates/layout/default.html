@@ -24,7 +24,23 @@ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 	
 	<!-- 사용자 CSS 영역 -->
 	<th:block layout:fragment = "css"></th:block>
+
+	<style>	
+		.active > #ace{
+			color:red;
+		}
+	
+		#paginationAll{
+			width:100px;
+		}
+	
+		.customized-page{
+			font-size:20px;
+			padding:7px;
+		}
+	</style>
 </head>
+
 <body>
 <!-- header -->
 <header th:replace="fragment/header::headerFragment"></header>

@@ -1,16 +1,22 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.domain.Board;
 import com.example.demo.domain.Member;
 import com.example.demo.repository.BoardRepository;
+import com.example.demo.vo.PageMaker;
+import com.example.demo.vo.PageVO;
 
 @Controller
 @RequestMapping("/ash")
@@ -23,15 +29,19 @@ public class AshController {
 	
 	//게시판 리스트 출력
 	@RequestMapping("/ashBoard")
-	public String ashList(Model model){
-		List<Board> board = boardRepository.findAll();
-		model.addAttribute("list",board);
+	public String ashList(Model model,@ModelAttribute("pageVO") PageVO vo){
+		Pageable page = vo.makePageable(0, "boardNo");
+		
+		Page<Board> result = boardRepository.findAll(boardRepository.makePredicate(vo.getType(), vo.getKeyword()),page);
+		
+		model.addAttribute("result", new PageMaker(result));
+		
 		return "ash/ashBoard";
 	}
 	
 	//글읽기폼으로 들어가기
-	@RequestMapping("/readForm")
-	public String readForm(Model model, @RequestParam int boardNo) {
+	@GetMapping("/readForm")
+	public String readForm(Model model, @RequestParam int boardNo, @ModelAttribute("pageVO") PageVO vo) {
 		
 		Board newBoard = boardRepository.findById(boardNo).get();
 		newBoard.setHit(newBoard.getHit()+1);
