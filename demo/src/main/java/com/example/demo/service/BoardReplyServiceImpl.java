@@ -44,4 +44,10 @@ public class BoardReplyServiceImpl implements BoardReplySevice {
 		return boardreplyrepository.countReply(boardNo);
 	}
 
+	@Override
+	public void deleteParentReply(int parent_id) {
+		boardreplyrepository.deleteParentReply(parent_id);
+		
+	}
+
 }

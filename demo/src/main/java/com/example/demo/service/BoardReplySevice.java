@@ -11,5 +11,6 @@ public interface BoardReplySevice {
 	public void dataSave(BoardReply boardRelpy);
 	public void deleteBoardReply(int replyNo);
 	public int countReply(int boardNo);
+	public void deleteParentReply(int parent_id);
 	
 }
